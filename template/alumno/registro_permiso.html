@@ -1,0 +1,157 @@
+{% include("alumno/cabecera_alumno.html") %}
+<style>
+        .caja{
+            margin: auto;
+            max-width: 1200px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .caja{
+                max-width: 90%;
+            }
+        }    
+</style>
+<br>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Solicitar permiso</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="form-control" action="/crear-permiso-alumno" method="post" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="txtTipo" class="form-label">Tipo de permiso</label>
+                <select name="txtTipo" id="txtTipo" class="form-control">
+                  <option value="{{tipoPermiso[0]['id_tipo']}}" > {{tipoPermiso[0]['nombre']}}: {{tipoPermiso[0]['descripcion']}}</option>
+                  <option value="{{tipoPermiso[1]['id_tipo']}}" > {{tipoPermiso[1]['nombre']}}: {{tipoPermiso[1]['descripcion']}}</option>
+                  <option value="{{tipoPermiso[2]['id_tipo']}}" > {{tipoPermiso[2]['nombre']}}: {{tipoPermiso[2]['descripcion']}}</option>
+                  <option value="{{tipoPermiso[3]['id_tipo']}}" > {{tipoPermiso[3]['nombre']}}: {{tipoPermiso[3]['descripcion']}}</option>
+                </select>
+              </div>
+                <div class="mb-3">
+                    <label for="txtDelDia" class="form-label">Del dia: <span id="diaActual"></span></label>
+                    <input type="hidden" class="form-control" id="txtDelDia" placeholder="Ingresa la fecha de inicio de cuatrimestre" name="txtDelDia" required>            
+                </div>
+                <div class="mb-3">
+                    <label for="txtHastaDia" class="form-label">Hasta el dia</label>
+                    <input type="date" class="form-control" id="txtHastaDia" placeholder="Ingresa la fecha de fin de cuatrimestre" name="txtHastaDia" required size="30">            
+                </div>
+                <div class="mb-3">
+                    <label for="txtArchivo" class="form-label">Archivo</label>
+                    <input type="file" class="form-control" id="txtArchivo" placeholder="Archivo" name="txtArchivo" required accept=".jpg .png .pdf">            
+                </div>
+                <div class="mb-3">
+                    <label for="txtAsunto" class="form-label">Asunto</label>
+                    <textarea name="txtAsunto" id="txtAsunto" cols="52" rows="5" required placeholder="Describe el motivo"></textarea>           
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="caja">
+    <p class="titulo text-center">Mis permisos</p>
+    {% if mensaje1 %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ mensaje1 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    <br>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Solicitar</button>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Fecha de solicitud</th>
+            <th scope="col">Fechas</th>
+            <th scope="col">Archivo</th>
+            <th scope="col">Asunto</th>
+            <th scope="col">Estatus</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for permiso in permisos_alumno %}
+            <tr>
+                <td>{{ permiso['fecha_soli'] }}</td>
+                <td>{{ permiso['fechas_soli'] }}</td>
+                <td>{{ permiso['archivo_per'] }}</td>
+                <td>{{ permiso['asunto_per'] }}</td>
+                <td>{{ permiso['estatus_per'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>     
+</div>
+
+<script>
+// Obtener referencia al select y al input de fecha
+const select = document.getElementById('txtTipo');
+    const fechaInput = document.getElementById('txtHastaDia');
+
+    // Función para limitar la fecha según la opción seleccionada
+    function limitarFecha() {
+      const opcionSeleccionada = select.value;
+      const fechaActual = new Date();
+      const limiteInferior = new Date(fechaActual);
+
+      // Restricciones de fechas según la opción seleccionada
+      if (opcionSeleccionada === '1') {
+        // Opción 1: No permitir días antes de la fecha actual y 3 días después
+        limiteInferior.setDate(fechaActual.getDate());
+        fechaActual.setDate(fechaActual.getDate() + 3);
+      } else if (opcionSeleccionada === '2') {
+        // Opción 2: No permitir días antes de la fecha actual y 15 días después
+        limiteInferior.setDate(fechaActual.getDate());
+        fechaActual.setDate(fechaActual.getDate() + 15);
+      } else if (opcionSeleccionada === '3') {
+        // Opción 3: No permitir días antes de la fecha actual y 30 días después
+        limiteInferior.setDate(fechaActual.getDate());
+        fechaActual.setDate(fechaActual.getDate() + 30);
+      } else if (opcionSeleccionada === '4') {
+        // Opción 4: Permitir 3 días antes de la fecha actual y ningún día después
+        limiteInferior.setDate(fechaActual.getDate() - 3);
+        fechaActual.setDate(fechaActual.getDate());
+      }
+
+      // Formatear las fechas en el formato requerido por el input de fecha
+      const fechaMinima = limiteInferior.toISOString().split('T')[0];
+      const fechaMaxima = fechaActual.toISOString().split('T')[0];
+
+      // Configurar los límites en el input de fecha
+      fechaInput.min = fechaMinima;
+      fechaInput.max = fechaMaxima;
+    }
+
+   // Función para obtener y establecer la fecha actual como el valor del input
+   function establecerFechaActual() {
+      // Crear un nuevo objeto Date que representa la fecha y hora actuales
+      const fechahoy = new Date();
+
+      // Obtener los componentes de la fecha: año, mes y día
+      const anio = fechahoy.getFullYear();
+      const mes = (fechahoy.getMonth() + 1).toString().padStart(2, '0'); // Se suma 1 porque los meses comienzan desde 0
+      const dia = fechahoy.getDate().toString().padStart(2, '0');
+
+      // Formatear la fecha en el formato 'YYYY-MM-DD' requerido por el input de tipo fecha
+      const fechaFormateada = `${anio}-${mes}-${dia}`;
+
+      // Establecer la fecha formateada como el valor del input
+      document.getElementById('txtDelDia').value = fechaFormateada;
+      document.getElementById('diaActual').textContent = fechaFormateada;
+    }
+
+    // Llamar a la función para que se ejecute al cargar la página
+    establecerFechaActual(); 
+        // Llamar a la función al cargar la página y cuando cambia la opción seleccionada
+        window.onload = limitarFecha;
+    select.addEventListener('change', limitarFecha);   
+
+  </script>

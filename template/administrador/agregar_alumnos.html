@@ -1,0 +1,71 @@
+{% include("administrador/cabecera_admin.html") %}
+
+<head>
+    <title>Registro grupo</title>
+</head>
+<style>
+    .caja {
+        margin: auto;
+        max-width: 1200px;
+    }
+
+    .titulo1 {
+            font-size: 20px;
+            font-weight: bold;
+        }  
+
+    @media only screen and (max-width: 600px) {
+        .caja {
+            max-width: 90%;
+        }
+    }
+</style>
+<br>
+<div class="caja">
+    {% if mensaje1 %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ mensaje1 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    {% if mensaje2 %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ mensaje2 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    <br>
+    <table class="table">
+        <div class="text-center">
+            <p class="titulo1">Alumnos de la carrera de: {{ nombreCa }}  que aun no tienen grupo, estos se pueden agregar a este grupo</p>
+        </div>
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Matricula</th>
+                <th scope="col">Agregar</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for alumnosg in alumnos_sg %}
+            <tr>
+                <td>{{ alumnosg['nombre_alumno'] }}</td>
+                <td>{{ alumnosg['apellidos_alumno'] }}</td>
+                <td>{{ alumnosg['matricula_alumno'] }}</td>
+                <td>
+                    <form action="vincular-alumno-grupo" method="POST">
+                            <div class="text-center">
+                                <input type="hidden" value="{{ carrera_buscar }}" name="txtCarreraGrupo"id="txtCarreraGrupo">
+                                <input type="hidden" value="{{ id_del_grupo }}" name="txtGrupoV" id="txtGrupoV">
+                                <input type="hidden" value="{{ nombreCa }}" name="txtNombreCarrera"id="txtNombreCarrera">
+                                <input type="hidden" value="{{ alumnosg['id_alumno'] }}" name="txtAlumnoV" id="txtAlumnoV">
+                                <button type="submit" class="btn btn-primary">Agregar</button>
+                            </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

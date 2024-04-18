@@ -1,0 +1,84 @@
+{% include("administrador/cabecera_admin.html") %}
+<head>
+    <title>Registro carrera</title>
+</head>
+<style>
+    .caja {
+        margin: auto;
+        max-width: 1200px;
+    }
+    .titulo {
+            font-size: 25px;
+            font-weight: bold;
+        }    
+
+    @media only screen and (max-width: 600px) {
+        .caja {
+            max-width: 90%;
+        }
+    }
+</style>
+<br>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar nueva carrera</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-control" action="crear-registro-carrera" method="post">
+                    <div class="mb-3">
+                        <label for="txtNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="txtNombre" placeholder="Ingresa el nombre"
+                            name="txtNombre" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <select name="txtDivision" id="txtDivision" class="form-control" required>
+                            <option value="">Selecciona una division</option>
+                            {% for division in divisiones %}
+                            <option value="{{ division['id_division'] }}">{{ division['nombre']}}</option>
+                            {% endfor %}
+                        </select>
+                        <a href="/registro-division" class="btn btn-success">Nuevo</a>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="caja">
+    <p class="text-center titulo">Registro de carreras</p>
+    {% if mensaje1 %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ mensaje1 }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}    
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Agregar</button>
+      </form>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Division</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for carrera in carreras %}
+            <tr>
+                <td>{{ carrera['nombre'] }}</td>
+                <td>{{ carrera['nombre_div'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

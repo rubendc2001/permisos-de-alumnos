@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" href="../static/images/favicon.png" type="image/x-icon"> 
+    <title>Iniciar sesion</title>
+</head>
+
+<body>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+            background: #f0f2f5;
+        }
+        .caja {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 15px -2px black;
+            background: #ffffff;
+        }
+
+        .logo{
+            width: 300px;
+            margin: 10px;
+        }
+
+        @media only screen and (max-width: 500px) {
+            .caja {
+                max-width: 95%;
+            }
+
+            .logo{
+                width: 100px;
+            }
+        }
+    </style>
+    <div class="caja">
+        {% if mensaje %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ mensaje }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% if datos == "" %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            No se pudo obtener datos del clima
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% if datos != "" %}
+        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                <p>Pais: {{datos[0]}} | Ciudad: {{datos[1]}} | Temperatura: {{datos[2]}}°C <img src="http://openweathermap.org/img/wn/{{datos[5]}}.png" alt="">
+                Humedad: {{datos[3]}}% | Velocidad del viento: {{datos[4]}}Km/h</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        <div class="text-center">
+            <img src="../static/images/logo1.png" class="logo">
+        </div>
+        <form action="/login" method="post">
+            <div class="mb-3">
+                <label for="txtCorreo" class="form-label">Correo:</label>
+                <input type="email" class="form-control" id="txtCorreo" name="txtCorreo" required placeholder="Ingresa tu correo electronico">
+            </div>
+            <div class="mb-3">
+                <label for="txtPassword" class="form-label">Contraseña:</label>
+                <input type="password" class="form-control" id="txtPassword" name="txtPassword" required placeholder="Ingresa tu contraseña">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Ingresar</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

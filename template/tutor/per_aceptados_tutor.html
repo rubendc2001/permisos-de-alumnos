@@ -1,0 +1,68 @@
+{% include("tutor/cabecera_tutor.html") %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permisos Aceptados Tutor</title>
+    <style>
+        .caja {
+            margin: auto;
+            max-width: 1200px;
+        }
+
+        .aceptados {
+            font-size: 25px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <br>
+    <div class="caja">
+
+        <p class="text-center aceptados">Permisos aceptados</p>
+        <form method="POST" action="/filtrar-por-mes-per-acpt">
+            <div class="input-group mb-3">
+            <select class="form-select" id="mes-filter" name="mes-filter" aria-label="Floating label select example">
+                <option value="">Selecciona el mes a filtrar</option>
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+            </select>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </div>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre del alumno</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Grupo</th>
+                    <th scope="col">Fecha de solicitud</th>
+                    <th scope="col">Fechas solicitadas</th>
+                    <th scope="col">Estatus</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for permiso in aceptados %}
+                <tr>
+                    <td>{{ permiso['nombre_alumno'] }}</td>
+                    <td>{{ permiso['apellidos'] }}</td>
+                    <td>{{ permiso['nombre_grupo'] }}</td>
+                    <td>{{ permiso['fecha_solicitud']}}</td>
+                    <td>{{ permiso['fechas_solicitadas']}}</td>
+                    <td>{{ permiso['nombre_estatus']}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

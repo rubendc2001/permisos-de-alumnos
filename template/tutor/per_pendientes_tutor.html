@@ -1,0 +1,124 @@
+{% include("tutor/cabecera_tutor.html") %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permisos Pendientes Tutor</title>
+    <style>
+        .pendientes {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .table {
+            margin: auto;
+            width: 80%;
+        }
+
+        .button-container {
+            display: flex;
+        }
+
+        .button-container form {
+            margin-right: 2px;
+        }
+
+        .button-container button {
+            /*padding: 5px 5px;*/
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+
+            transition: background-color 0.3s;
+        }
+
+        .button-container button.aceptar {
+            background-color: rgb(0, 255, 76);
+        }
+
+        .button-container button.rechazar {
+            background-color: rgb(255, 0, 0);
+        }
+
+        .button-container button.ver {
+            background-color: rgb(25, 0, 255);
+        }
+    </style>
+</head>
+
+<body>
+    <br>
+    <p class="text-center pendientes">Permisos pendientes</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nombre del alumno</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Grupo</th>
+                <th scope="col">Fecha de solicitud</th>
+                <th scope="col">Fechas solicitadas</th>
+                <th scope="col">Estatus</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for permiso in permisos %}
+            <tr>
+                <td>{{ permiso['nombre_alumno'] }}</td>
+                <td>{{ permiso['apellidos'] }}</td>
+                <td>{{ permiso['nombre_grupo'] }}</td>
+                <td>{{ permiso['fecha_solicitud']}}</td>
+                <td>{{ permiso['fechas_solicitadas']}}</td>
+                <td>{{ permiso['nombre_estatus']}}</td>
+                <td class="acciones">
+                    <div class="button-container">
+                        <form action="/aceptar-permiso-tutor/{{ permiso['id_permiso'] }}" method="post">
+                            <input type="hidden" name="id_permiso" value="{{ permiso['id_permiso'] }}">
+                            <button type="submit" class="btn btn-primary">Aceptar</button>
+                        </form>
+                        <form action="/rechazar-permiso-tutor/{{ permiso['id_permiso'] }}" method="post">
+                            <input type="hidden" name="id_permiso" value="{{ permiso['id_permiso'] }}">
+                            <button type="submit" class="btn btn-danger">Rechazar</button>
+                        </form>
+                        <form action="#" method="post">
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal{{ permiso['id_permiso'] }}">
+                                Detalles
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% for ver_permiso in ver_permisos %}
+    <div class="modal fade" id="exampleModal{{ver_permiso['id_permiso']}}" tabindex="-1"
+        aria-labelledby="exampleModal{{ver_permiso['id_permiso']}}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModal{{ver_permiso['id_permiso']}}">Detalles del permiso</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Nombre completo:</strong> {{ver_permiso['nombre_alumno']}} {{ver_permiso['apellidos']}}<br><br>
+                    <strong>Division:</strong> {{ver_permiso['nombre_division']}}<br><br>
+                    <strong>Carrera:</strong> {{ver_permiso['nombre_carrera']}}<br><br>
+                    <strong>Grupo:</strong> {{ver_permiso['nombre_grupo']}}<br><br>
+                    <strong>Fecha de solicitud:</strong> {{ver_permiso['fecha_solicitud']}}<br><br>
+                    <strong>Archivo:</strong> {{ver_permiso['nombre_archivo']}}<br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</body>
+
+</html>

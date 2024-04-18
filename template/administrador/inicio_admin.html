@@ -1,0 +1,66 @@
+{% include("administrador/cabecera_admin.html") %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+</head>
+
+<body>
+    <style>
+        .caja {
+            margin: auto;
+            max-width: 900px;
+        }
+
+        .form-control {
+            padding: 10px;
+        }
+
+        .titulo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        #logo {
+            width: 300px;
+            height: 100px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .caja {
+                max-width: 90%;
+            }
+        }
+    </style>
+    <br>
+    <div class="caja">
+        <form class="form-control" action="/">
+            <p class="text-center titulo">Administrador</p>
+            <div class="mb-3">
+                <label>
+                    <p class="titulos"><strong>Nombre:</strong> {{nombre}}</p>
+                </label>
+            </div>
+            <div class="mb-3">
+                <label>
+                    <p class="titulos"><strong>Apellidos:</strong> {{apellidos}}</p>
+                </label>
+            </div>
+            <div class="mb-3">
+                <label>
+                    <p class="titulos"><strong>Correo:</strong> {{correo}}</p>
+                </label>
+            </div>
+            <div class="mb-3">
+                <label>
+                    <p class="titulos"><strong>Contraseña:</strong> {{contra}}</p>
+                </label>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

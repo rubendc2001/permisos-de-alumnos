@@ -1,0 +1,49 @@
+{% include("administrador/cabecera_admin.html") %}
+
+<head>
+    <title>Registro grupo</title>
+</head>
+<style>
+    .caja {
+        margin: auto;
+        max-width: 1200px;
+    }
+
+    .titulo1 {
+            font-size: 20px;
+            font-weight: bold;
+        }    
+
+    @media only screen and (max-width: 600px) {
+        .caja {
+            max-width: 90%;
+        }
+    }
+</style>
+<br>
+<div class="caja">
+    <br>
+    <table class="table">
+        <div class="text-center">
+            <p class="titulo1">Alumnos pertenecientes al grupo {{ datogrupo['nombre'] }}</p>
+        </div>
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Matricula</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for alumno in alumnos_grupo %}
+            <tr>
+                <td>{{ alumno['nombre_alumno'] }}</td>
+                <td>{{ alumno['apellidos_alumno'] }}</td>
+                <td>{{ alumno['correo_alumno'] }}</td>
+                <td>{{ alumno['matricula_alumno'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
